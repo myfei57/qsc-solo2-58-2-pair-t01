@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from maskhub.console.handlers import audit, catalog, policy, rule, source, system
+from maskhub.console.handlers import audit, catalog, discovery, policy, rule, source, system
 from maskhub.console.http import Request, Response
 from maskhub.console.router import Router
 
@@ -23,6 +23,13 @@ def build_router(runtime) -> Router:
     router.get("/datasets", bind(catalog.list_datasets, runtime))
     router.post("/datasets", bind(catalog.register_dataset, runtime))
     router.get("/dataset", bind(catalog.get_dataset, runtime))
+
+    router.post("/discovery/scan", bind(discovery.scan, runtime))
+    router.get("/discovery/status", bind(discovery.discovery_status, runtime))
+    router.get("/discovery/review", bind(discovery.review_queue, runtime))
+    router.post("/discovery/decide", bind(discovery.decide, runtime))
+    router.post("/discovery/publish", bind(discovery.publish, runtime))
+    router.get("/discovery/categories", bind(discovery.categories, runtime))
 
     router.get("/rules", bind(rule.list_rules, runtime))
     router.post("/rules", bind(rule.create_rule, runtime))
